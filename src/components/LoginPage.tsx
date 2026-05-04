@@ -35,7 +35,8 @@ export default function LoginPage() {
       const data = await login(email, password)
       const maxAge = rememberMe ? 2592000 : 86400 // 30 days if remember me, else 1 day
       setAuthCookies(data.token, data.email, maxAge)
-      router.push('/inbox')
+      router.push('/')
+      router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed')
     } finally {
