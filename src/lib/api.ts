@@ -45,8 +45,10 @@ export async function login(email: string, password: string): Promise<AuthRespon
   return res.json()
 }
 
+// ── Admin API (/api/v1/admin/*) ───────────────────────────────────────────────
+
 export async function createUser(email: string, password: string, role: string = 'user'): Promise<void> {
-  const res = await fetch(`${API_BASE}/api/v1/users`, {
+  const res = await fetch(`${API_BASE}/api/v1/admin/users`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...authHeaders() },
     body: JSON.stringify({ email, password, role }),
@@ -58,7 +60,7 @@ export async function createUser(email: string, password: string, role: string =
 }
 
 export async function updateUser(email: string, updates: { role?: string; quota_bytes?: number; active?: boolean }): Promise<void> {
-  const res = await fetch(`${API_BASE}/api/v1/users/${encodeURIComponent(email)}`, {
+  const res = await fetch(`${API_BASE}/api/v1/admin/users/${encodeURIComponent(email)}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', ...authHeaders() },
     body: JSON.stringify(updates),
@@ -70,7 +72,7 @@ export async function updateUser(email: string, updates: { role?: string; quota_
 }
 
 export async function deactivateUser(email: string): Promise<void> {
-  const res = await fetch(`${API_BASE}/api/v1/users/${encodeURIComponent(email)}`, {
+  const res = await fetch(`${API_BASE}/api/v1/admin/users/${encodeURIComponent(email)}`, {
     method: 'DELETE',
     headers: authHeaders(),
   })
@@ -79,6 +81,8 @@ export async function deactivateUser(email: string): Promise<void> {
     throw new Error(data.error || 'Deactivation failed')
   }
 }
+
+// ── User API (/api/v1/mailboxes/*) ────────────────────────────────────────────
 
 export async function getFolders(email: string): Promise<Folder[]> {
   const res = await fetch(`${API_BASE}/api/v1/mailboxes/${encodeURIComponent(email)}/folders`, {

@@ -1,10 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { isAdmin } from '@/lib/auth'
 import { createUser, deactivateUser, updateUser } from '@/lib/api'
+import { getToken } from '@/lib/auth'
 
 interface User {
   email: string
@@ -24,21 +22,14 @@ export default function AdminPage() {
   const [newPassword, setNewPassword] = useState('')
   const [newRole, setNewRole] = useState('user')
   const [creating, setCreating] = useState(false)
-  const router = useRouter()
 
-  useEffect(() => {
-    if (!isAdmin()) {
-      router.push('/inbox')
-      return
-    }
-    loadUsers()
-  }, [])
+  useEffect(() => { loadUsers() }, [])
 
   async function loadUsers() {
+    setLoading(true)
     try {
-      const { getToken } = await import('@/lib/auth')
-      const res = await fetch(`${API_BASE}/api/v1/users`, {
-        headers: { 'Authorization': `Bearer ${getToken()}` }
+      const res = await fetch(`${API_BASE}/api/v1/admin/users`, {
+        headers: { 'Authorization': `Bearer ${getToken()}` },
       })
       if (!res.ok) throw new Error('Failed to load users')
       const data = await res.json()
@@ -99,15 +90,7 @@ export default function AdminPage() {
   return (
     <div className="p-8">
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">Admin Panel</h1>
-          <Link
-            href="/inbox"
-            className="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
-          >
-            ← Back to Inbox
-          </Link>
-        </div>
+        <h1 className="text-3xl font-bold text-zinc-900 dark:text-white mb-8">Users</h1>
 
         {error && (
           <div className="p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-md mb-6">
@@ -175,7 +158,7 @@ export default function AdminPage() {
         <div className="bg-white dark:bg-zinc-800 rounded-lg shadow">
           <div className="p-6 border-b border-zinc-200 dark:border-zinc-700 flex items-center justify-between">
             <h2 className="text-xl font-semibold text-zinc-900 dark:text-white">
-              Users <span className="text-sm font-normal text-zinc-500">({users.length})</span>
+              All Users <span className="text-sm font-normal text-zinc-500">({users.length})</span>
             </h2>
             <button
               onClick={() => setShowCreateForm(true)}
@@ -199,7 +182,7 @@ export default function AdminPage() {
                 {users.map(user => (
                   <tr key={user.email} className="border-b border-zinc-100 dark:border-zinc-700 last:border-0">
                     <td className="p-4 text-sm text-zinc-900 dark:text-white">{user.email}</td>
-                    <td className="p-4 text-sm text-zinc-600 dark:text-zinc-400">
+                    <td className="p-4 text-sm">
                       <span className={`px-2 py-1 rounded-full text-xs ${
                         user.role === 'admin'
                           ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'
