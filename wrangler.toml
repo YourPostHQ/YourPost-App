@@ -9,7 +9,3 @@ NODE_VERSION = "18"
 
 [assets]
 directory = "out"
-
-[[routes]]
-pattern = "yourpost.app"
-zone_name = "yourpost.app"
