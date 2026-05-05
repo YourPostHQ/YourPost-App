@@ -15,38 +15,38 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
+          {/* Logo - App */}
           <Link href="/" className="flex items-center space-x-2">
             <span 
               className="w-7 h-7 text-zinc-900 dark:text-white" 
               dangerouslySetInnerHTML={{ __html: theme === 'light' ? logoOutlinedSvg : logoFilledSvg }} 
             />
             <span className="font-bold text-xl text-zinc-900 dark:text-white">YourPost</span>
-            <span className="text-sm text-zinc-500 dark:text-zinc-400 ml-2">Webmail</span>
+            <span className="ml-2 text-sm text-zinc-500 dark:text-zinc-400">App</span>
           </Link>
 
-          {/* Nav links */}
-          <div className="flex items-center space-x-2">
-            {isAuthenticated() && isSystem() && (
-              <Link
-                href="/system"
-                className="px-3 py-1.5 text-sm font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-md hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
-              >
-                System
-              </Link>
-            )}
-            {isAuthenticated() && isAdmin() && (
-              <Link
-                href="/admin"
-                className="px-3 py-1.5 text-sm font-medium bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-md hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors"
-              >
-                Admin
-              </Link>
-            )}
+          {/* Center - Login/Register */}
+          <div className="hidden md:flex items-center space-x-4">
+            <Link href="/login" className="text-sm text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white">
+              Login
+            </Link>
+            <Link href="/register" className="text-sm bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+              Sign Up Free
+            </Link>
           </div>
 
           {/* Actions */}
           <div className="flex items-center space-x-2">
+            {/* Self-hosted Link */}
+            <a
+              href="https://yourpost.io"
+              className="text-sm text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Self-hosted?
+            </a>
+
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
@@ -66,8 +66,38 @@ export function Header() {
                 </svg>
               )}
             </button>
+
+            {/* Mobile Menu */}
+            <button
+              className="md:hidden p-2 text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 5h16M4 12h16M4 19h16"/>
+              </svg>
+            </button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden py-4 space-y-2">
+            <Link href="/login" className="block py-2 text-sm text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white">
+              Login
+            </Link>
+            <Link href="/register" className="block py-2 text-sm bg-blue-600 text-white px-4 rounded-md hover:bg-blue-700 inline-block">
+              Sign Up Free
+            </Link>
+            <a
+              href="https://yourpost.io"
+              className="block py-2 text-sm text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Self-hosted?
+            </a>
+          </div>
+        )}
       </div>
     </header>
   )
