@@ -1,6 +1,8 @@
 # YourPost Webmail
 
-Modern, responsive webmail interface for YourPost mail server, built with Next.js and TypeScript.
+**Pure frontend** webmail interface for YourPost mail server, built with Next.js and TypeScript.
+
+⚠️ **This is a frontend-only application** - it connects to the YourPost backend API and does NOT store emails or databases locally.
 
 [![License: AGPLv3](https://img.shields.io/badge/License-AGPLv3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Next.js](https://img.shields.io/badge/Next.js-14-black.svg)](https://nextjs.org)
@@ -58,7 +60,8 @@ yourpost-webmail/
 ### Prerequisites
 
 - Node.js 18+ and npm/yarn/pnpm
-- A running YourPost backend server (see [YourPost Server README](../yourpost/README.md))
+- **A running YourPost backend server** - this webmail is a pure frontend that connects to the backend API (see [YourPost Server README](../yourpost/README.md))
+- **No local database or mail storage** - everything is handled by the backend
 
 ### 1. Install Dependencies
 
