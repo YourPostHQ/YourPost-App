@@ -79,19 +79,13 @@ export default function AdminPage() {
     }
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-zinc-600 dark:text-zinc-400">Loading...</p>
-      </div>
-    )
-  }
-
   return (
-    <div className="p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="p-6 sm:p-8">
+      <div className="max-w-4xl mx-auto">
+
+        {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">Users</h1>
+          <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">Users</h1>
           {domain && (
             <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
               Domain: <span className="font-medium text-zinc-700 dark:text-zinc-300">{domain}</span>
@@ -100,34 +94,35 @@ export default function AdminPage() {
         </div>
 
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-md mb-6">
+          <div className="mb-6 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg text-sm">
             {error}
           </div>
         )}
 
+        {/* Create form */}
         {showCreateForm && (
-          <div className="bg-white dark:bg-zinc-800 rounded-lg shadow mb-6 p-6">
-            <h2 className="text-lg font-semibold text-zinc-900 dark:text-white mb-4">Add User</h2>
-            <form onSubmit={handleCreateUser} className="flex flex-wrap gap-4 items-end">
+          <div className="mb-6 p-6 bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700">
+            <h2 className="text-sm font-semibold text-zinc-900 dark:text-white mb-4">Add User</h2>
+            <form onSubmit={handleCreateUser} className="flex flex-wrap gap-3 items-end">
               <div className="flex-1 min-w-48">
-                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Email</label>
+                <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1.5 uppercase tracking-wide">Email</label>
                 <input
                   type="email"
                   value={newEmail}
                   onChange={e => setNewEmail(e.target.value)}
                   required
-                  className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white text-sm"
+                  className="w-full px-3 py-2 text-sm border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-400 focus:border-transparent"
                   placeholder={`user@${domain || 'yourdomain.com'}`}
                 />
               </div>
               <div className="flex-1 min-w-48">
-                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Password</label>
+                <label className="block text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1.5 uppercase tracking-wide">Password</label>
                 <input
                   type="password"
                   value={newPassword}
                   onChange={e => setNewPassword(e.target.value)}
                   required
-                  className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-md bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white text-sm"
+                  className="w-full px-3 py-2 text-sm border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-400 focus:border-transparent"
                   placeholder="••••••••"
                 />
               </div>
@@ -135,14 +130,14 @@ export default function AdminPage() {
                 <button
                   type="submit"
                   disabled={creating}
-                  className="px-4 py-2 bg-zinc-900 dark:bg-zinc-700 hover:bg-zinc-800 dark:hover:bg-zinc-600 text-white text-sm rounded-md disabled:opacity-50"
+                  className="px-4 py-2 bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-900 text-sm font-medium rounded-lg disabled:opacity-50 transition-colors"
                 >
-                  {creating ? 'Adding...' : 'Add'}
+                  {creating ? 'Adding…' : 'Add user'}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowCreateForm(false)}
-                  className="px-4 py-2 border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 text-sm rounded-md hover:bg-zinc-50 dark:hover:bg-zinc-700"
+                  className="px-4 py-2 border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 text-sm rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors"
                 >
                   Cancel
                 </button>
@@ -151,56 +146,86 @@ export default function AdminPage() {
           </div>
         )}
 
-        <div className="bg-white dark:bg-zinc-800 rounded-lg shadow">
-          <div className="p-6 border-b border-zinc-200 dark:border-zinc-700 flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-zinc-900 dark:text-white">
-              Users <span className="text-sm font-normal text-zinc-500">({users.length})</span>
-            </h2>
-            <button
-              onClick={() => setShowCreateForm(true)}
-              className="px-4 py-2 bg-zinc-900 dark:bg-zinc-700 hover:bg-zinc-800 dark:hover:bg-zinc-600 text-white text-sm rounded-md"
-            >
-              + Add User
-            </button>
+        {/* Table */}
+        <div className="bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700 overflow-hidden">
+          <div className="px-6 py-4 border-b border-zinc-200 dark:border-zinc-700 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <h2 className="text-sm font-semibold text-zinc-900 dark:text-white">
+                {loading ? 'Users' : `${users.length} ${users.length === 1 ? 'user' : 'users'}`}
+              </h2>
+            </div>
+            {!showCreateForm && (
+              <button
+                onClick={() => setShowCreateForm(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-900 text-xs font-medium rounded-lg transition-colors"
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                Add user
+              </button>
+            )}
           </div>
-          <div className="overflow-x-auto">
+
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="w-5 h-5 border-2 border-zinc-200 dark:border-zinc-700 border-t-zinc-900 dark:border-t-white rounded-full animate-spin" />
+            </div>
+          ) : users.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 text-zinc-400 dark:text-zinc-600">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mb-3">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+              <p className="text-sm">No users yet</p>
+            </div>
+          ) : (
             <table className="w-full">
               <thead>
-                <tr className="border-b border-zinc-200 dark:border-zinc-700">
-                  <th className="text-left p-4 text-sm font-medium text-zinc-500 dark:text-zinc-400">Email</th>
-                  <th className="text-left p-4 text-sm font-medium text-zinc-500 dark:text-zinc-400">Quota</th>
-                  <th className="text-left p-4 text-sm font-medium text-zinc-500 dark:text-zinc-400">Status</th>
-                  <th className="text-right p-4 text-sm font-medium text-zinc-500 dark:text-zinc-400">Actions</th>
+                <tr className="border-b border-zinc-100 dark:border-zinc-700">
+                  <th className="text-left px-6 py-3 text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wide">User</th>
+                  <th className="text-left px-6 py-3 text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wide">Quota</th>
+                  <th className="text-left px-6 py-3 text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wide">Status</th>
+                  <th className="px-6 py-3" />
                 </tr>
               </thead>
               <tbody>
                 {users.map(user => (
-                  <tr key={user.email} className="border-b border-zinc-100 dark:border-zinc-700 last:border-0">
-                    <td className="p-4 text-sm text-zinc-900 dark:text-white">{user.email}</td>
-                    <td className="p-4 text-sm text-zinc-600 dark:text-zinc-400">
+                  <tr key={user.email} className="border-b border-zinc-100 dark:border-zinc-800 last:border-0 hover:bg-zinc-50 dark:hover:bg-zinc-700/30 transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-xs font-semibold text-zinc-600 dark:text-zinc-300 flex-shrink-0">
+                          {user.email[0].toUpperCase()}
+                        </div>
+                        <span className="text-sm text-zinc-900 dark:text-white">{user.email}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-zinc-500 dark:text-zinc-400 tabular-nums">
                       {Math.round(user.quota_bytes / 1024 / 1024)} MB
                     </td>
-                    <td className="p-4 text-sm">
-                      <span className={`px-2 py-1 rounded-full text-xs ${
+                    <td className="px-6 py-4">
+                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
                         user.active
-                          ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
-                          : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
+                          ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400'
+                          : 'bg-zinc-100 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400'
                       }`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${user.active ? 'bg-green-500' : 'bg-zinc-400'}`} />
                         {user.active ? 'Active' : 'Inactive'}
                       </span>
                     </td>
-                    <td className="p-4 text-right">
+                    <td className="px-6 py-4 text-right">
                       {user.active ? (
                         <button
                           onClick={() => handleDeactivate(user.email)}
-                          className="text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
+                          className="text-xs text-zinc-400 hover:text-red-500 dark:text-zinc-500 dark:hover:text-red-400 transition-colors font-medium"
                         >
                           Deactivate
                         </button>
                       ) : (
                         <button
                           onClick={() => handleReactivate(user.email)}
-                          className="text-sm text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300"
+                          className="text-xs text-zinc-400 hover:text-green-600 dark:text-zinc-500 dark:hover:text-green-400 transition-colors font-medium"
                         >
                           Reactivate
                         </button>
@@ -210,7 +235,7 @@ export default function AdminPage() {
                 ))}
               </tbody>
             </table>
-          </div>
+          )}
         </div>
       </div>
     </div>
