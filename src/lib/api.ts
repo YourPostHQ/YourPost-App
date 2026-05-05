@@ -44,7 +44,20 @@ export async function login(email: string, password: string): Promise<AuthRespon
   }
   return res.json()
 }
+// ── Public: Domain Owner Registration (/api/v1/register) ──────────────────
 
+export async function register(email: string, password: string): Promise<AuthResponse> {
+  const res = await fetch(`${API_BASE}/api/v1/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  })
+  if (!res.ok) {
+    const data = await res.json()
+    throw new Error(data.error || 'Registration failed')
+  }
+  return res.json()
+}
 // ── Admin API (/api/v1/admin/*) ───────────────────────────────────────────────
 
 export async function createUser(email: string, password: string, role: string = 'user'): Promise<void> {

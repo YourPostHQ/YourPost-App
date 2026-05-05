@@ -27,8 +27,11 @@ export default function RegisterPage() {
     }
 
     try {
-      await register(email, password)
-      router.push('/login?registered=true')
+      const data = await register(email, password)
+      // Store token and email in cookies
+      document.cookie = `yourpost-token=${data.token}; path=/; max-age=2592000`
+      document.cookie = `yourpost-email=${data.email}; path=/; max-age=2592000`
+      router.push('/inbox')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed')
     } finally {
