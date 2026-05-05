@@ -60,8 +60,8 @@ export function clearAuthCookies(): void {
   document.cookie = 'yourpost-email=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
 }
 
-export function roleBasedRedirect(): string {
-  const role = getUserRole();
+export function roleBasedRedirect(roleFromResponse?: string): string {
+  const role = roleFromResponse || getUserRole();
   if (role === 'system') return '/system';
   if (role === 'admin') return '/admin';
   return '/inbox';

@@ -37,7 +37,8 @@ export default function RegisterPage() {
     try {
       const data = await register(email, password, domain)
       setAuthCookies(data.token, data.email, 86400)
-      router.push('/admin')
+      // Use role from API response - auth flow handles redirect
+      router.push(data.role === 'system' ? '/system' : '/admin')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed')
     } finally {

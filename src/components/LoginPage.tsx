@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useTheme } from '@/components/ThemeProvider'
@@ -18,12 +18,6 @@ export default function LoginPage() {
   const router = useRouter()
   const { theme, toggleTheme } = useTheme()
 
-  useEffect(() => {
-    if (typeof document !== 'undefined' && document.cookie.includes('yourpost-token=')) {
-      router.push(roleBasedRedirect())
-    }
-  }, [router])
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -32,7 +26,8 @@ export default function LoginPage() {
       const data = await login(email, password)
       const maxAge = rememberMe ? 2592000 : 86400
       setAuthCookies(data.token, data.email, maxAge)
-      router.push(roleBasedRedirect())
+      // Use role from API response directly - auth flow handles redirect
+      router.push(roleBasedRedirect(data.role))
       router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed')
