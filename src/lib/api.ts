@@ -6,6 +6,7 @@ export interface AuthResponse {
   token: string
   email: string
   role: string
+  domain: string
 }
 
 export interface Folder {
@@ -46,11 +47,11 @@ export async function login(email: string, password: string): Promise<AuthRespon
 }
 // ── Public: Domain Owner Registration (/api/v1/register) ──────────────────
 
-export async function register(email: string, password: string): Promise<AuthResponse> {
+export async function register(email: string, password: string, domain: string): Promise<AuthResponse> {
   const res = await fetch(`${API_BASE}/api/v1/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, password, domain }),
   })
   if (!res.ok) {
     const data = await res.json()
@@ -58,13 +59,57 @@ export async function register(email: string, password: string): Promise<AuthRes
   }
   return res.json()
 }
+// ── System API (/api/v1/system/*) ────────────────────────────────────────────
+
+export interface Domain {
+  domain: string
+  created_at: number
+}
+
+export async function systemListUsers(): Promise<{ email: string; role: string; domain: string; active: boolean; quota_bytes: number }[]> {
+  const res = await fetch(`${API_BASE}/api/v1/system/users`, { headers: authHeaders() })
+  if (!res.ok) throw new Error('Failed to fetch users')
+  const data = await res.json()
+  return data.users || []
+}
+
+export async function systemListDomains(): Promise<Domain[]> {
+  const res = await fetch(`${API_BASE}/api/v1/system/domains`, { headers: authHeaders() })
+  if (!res.ok) throw new Error('Failed to fetch domains')
+  const data = await res.json()
+  return data.domains || []
+}
+
+export async function systemCreateUser(email: string, password: string, role: string, domain?: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/api/v1/system/users`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
+    body: JSON.stringify({ email, password, role, domain }),
+  })
+  if (!res.ok) {
+    const data = await res.json()
+    throw new Error(data.error || 'User creation failed')
+  }
+}
+
+export async function systemDeactivateUser(email: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/api/v1/system/users/${encodeURIComponent(email)}`, {
+    method: 'DELETE',
+    headers: authHeaders(),
+  })
+  if (!res.ok) {
+    const data = await res.json()
+    throw new Error(data.error || 'Deactivation failed')
+  }
+}
+
 // ── Admin API (/api/v1/admin/*) ───────────────────────────────────────────────
 
-export async function createUser(email: string, password: string, role: string = 'user'): Promise<void> {
+export async function createUser(email: string, password: string): Promise<void> {
   const res = await fetch(`${API_BASE}/api/v1/admin/users`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...authHeaders() },
-    body: JSON.stringify({ email, password, role }),
+    body: JSON.stringify({ email, password }),
   })
   if (!res.ok) {
     const data = await res.json()

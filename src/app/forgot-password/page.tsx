@@ -13,7 +13,7 @@ export default function ForgotPassword() {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Image
-              src={theme === 'light' ? '/yourpost-outlined.svg' : '/yourpost-filled.svg'}
+              src="/yourpost.app.svg"
               alt="YourPost Logo"
               width={32}
               height={32}

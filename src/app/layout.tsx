@@ -40,8 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/yourpost-outlined.svg" media="(prefers-color-scheme: light)" />
-        <link rel="icon" href="/yourpost-filled.svg" media="(prefers-color-scheme: dark)" />
+        <link rel="icon" href="/yourpost.app.svg" />
         <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}` }} />
       </head>
       <body className={`${inter.className} bg-white text-zinc-900 dark:bg-zinc-900 dark:text-white`}>

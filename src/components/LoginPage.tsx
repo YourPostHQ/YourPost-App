@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { useTheme } from '@/components/ThemeProvider'
 import { login } from '@/lib/api'
-import { setAuthCookies } from '@/lib/auth'
+import { setAuthCookies, roleBasedRedirect } from '@/lib/auth'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -17,12 +17,8 @@ export default function LoginPage() {
   const { theme } = useTheme()
 
   useEffect(() => {
-    // Check if already logged in
-    if (typeof document !== 'undefined') {
-      const hasToken = document.cookie.includes('yourpost-token=')
-      if (hasToken) {
-        router.push('/')
-      }
+    if (typeof document !== 'undefined' && document.cookie.includes('yourpost-token=')) {
+      router.push(roleBasedRedirect())
     }
   }, [router])
 
@@ -33,9 +29,9 @@ export default function LoginPage() {
     
     try {
       const data = await login(email, password)
-      const maxAge = rememberMe ? 2592000 : 86400 // 30 days if remember me, else 1 day
+      const maxAge = rememberMe ? 2592000 : 86400
       setAuthCookies(data.token, data.email, maxAge)
-      router.push('/')
+      router.push(roleBasedRedirect())
       router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed')
@@ -50,7 +46,7 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Image
-              src={theme === 'light' ? '/yourpost-outlined.svg' : '/yourpost-filled.svg'}
+              src="/yourpost.app.svg"
               alt="YourPost Logo"
               width={32}
               height={32}

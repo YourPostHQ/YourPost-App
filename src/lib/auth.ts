@@ -24,10 +24,22 @@ function decodeJwtPayload(token: string): Record<string, unknown> | null {
 
 export function getUserRole(): string {
   const token = getToken();
-  if (!token) return 'user';
+  if (!token) return '';
   const payload = decodeJwtPayload(token);
-  if (!payload) return 'user';
-  return typeof payload.role === 'string' ? payload.role : 'user';
+  if (!payload) return '';
+  return typeof payload.role === 'string' ? payload.role : '';
+}
+
+export function getUserDomain(): string {
+  const token = getToken();
+  if (!token) return '';
+  const payload = decodeJwtPayload(token);
+  if (!payload) return '';
+  return typeof payload.domain === 'string' ? payload.domain : '';
+}
+
+export function isSystem(): boolean {
+  return getUserRole() === 'system';
 }
 
 export function isAdmin(): boolean {
@@ -46,4 +58,11 @@ export function setAuthCookies(token: string, email: string, maxAge: number): vo
 export function clearAuthCookies(): void {
   document.cookie = 'yourpost-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
   document.cookie = 'yourpost-email=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+}
+
+export function roleBasedRedirect(): string {
+  const role = getUserRole();
+  if (role === 'system') return '/system';
+  if (role === 'admin') return '/admin';
+  return '/inbox';
 }
