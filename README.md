@@ -1,13 +1,12 @@
 # YourPost App
 
-**Universal frontend** for YourPost mail server - runs as a web app (Next.js) and native desktop app (Tauri).
-
-⚠️ **This is a frontend-only application** - it connects to the YourPost backend API and does NOT store emails or databases locally.
+**Universal email client** for YourPost mail server - runs as a web app (Next.js) and native desktop app (Tauri).
 
 [![License: AGPLv3](https://img.shields.io/badge/License-AGPLv3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Next.js](https://img.shields.io/badge/Next.js-14-black.svg)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC.svg)](https://tailwindcss.com)
+[![Tauri](https://img.shields.io/badge/Tauri-1.0-orange.svg)](https://tauri.app)
 
 ## ✨ Features
 
@@ -20,7 +19,7 @@
 - **Responsive Design** - Works on desktop, tablet, and mobile devices
 - **E2E Testing** - Playwright test suite for critical user flows
 - **Cloudflare Ready** - Deployable to Cloudflare Pages
-- **Tauri Support** - Coming soon: Native desktop app for Windows, macOS, and Linux
+- **Tauri Desktop App** - Native desktop app for Windows, macOS, and Linux
 
 ## 📁 Project Structure
 
@@ -49,6 +48,7 @@ yourpost-app/
 │       └── ...                # Other utilities
 ├── public/                     # Static assets
 ├── e2e/                        # Playwright E2E tests
+├── src-tauri/                   # Tauri desktop app (coming soon)
 ├── next.config.js              # Next.js configuration
 ├── tailwind.config.ts          # Tailwind CSS config
 ├── tsconfig.json               # TypeScript config
@@ -67,7 +67,7 @@ yourpost-app/
 ### 1. Install Dependencies
 
 ```bash
-cd /root/yourpost-workspace/yourpost-webmail
+cd /root/yourpost-workspace/yourpost-app
 npm install
 ```
 
@@ -177,20 +177,34 @@ The webmail supports both light and dark modes:
 Configuration is in `wrangler.toml`:
 
 ```toml
-name = "yourpost-webmail"
+name = "yourpost-app"
 compatibility_date = "2024-01-01"
 
-[env.production]
-vars = { NEXT_PUBLIC_API_URL = "https://your-api-domain.com" }
+[build]
+command = "npm run build"
+
+[build.environment]
+NODE_VERSION = "18"
+
+[assets]
+directory = "out"
+
+[[routes]]
+pattern = "webmail.yourpost.io"
+zone_name = "yourpost.io"
 ```
 
-### Docker (Alternative)
+### Tauri Desktop App (Coming Soon)
 
 ```bash
-docker build -t yourpost-webmail .
-docker run -p 3000:3000 \
-  -e NEXT_PUBLIC_API_URL=https://your-api-domain.com \
-  yourpost-webmail
+# Install Tauri CLI
+cargo install tauri-cli
+
+# Run in development mode
+npm run tauri dev
+
+# Build for production
+npm run tauri build
 ```
 
 ## 🔒 Security
@@ -241,8 +255,8 @@ This project is licensed under the AGPLv3 License - see the [LICENSE](../yourpos
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/YourPostHQ/YourPost-Webmail/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/YourPostHQ/YourPost-Webmail/discussions)
+- **Issues**: [GitHub Issues](https://github.com/YourPostHQ/YourPost-App/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/YourPostHQ/YourPost-App/discussions)
 - **Documentation**: [YourPost Docs](https://yourpost.org/docs)
 
 ---
