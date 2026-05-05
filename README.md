@@ -1,6 +1,6 @@
-# YourPost Webmail
+# YourPost App
 
-**Pure frontend** webmail interface for YourPost mail server, built with Next.js and TypeScript.
+**Universal frontend** for YourPost mail server - runs as a web app (Next.js) and native desktop app (Tauri).
 
 ⚠️ **This is a frontend-only application** - it connects to the YourPost backend API and does NOT store emails or databases locally.
 
@@ -11,7 +11,7 @@
 
 ## ✨ Features
 
-- **Modern Webmail UI** - Clean, responsive email interface
+- **Modern Email UI** - Clean, responsive email interface
 - **JWT Authentication** - Secure login with role-based access control (RBAC)
 - **Admin Panel** - User management with role assignment and quota control
 - **Multi-Folder Support** - Inbox, Sent, Drafts, Trash, and custom folders
@@ -20,11 +20,12 @@
 - **Responsive Design** - Works on desktop, tablet, and mobile devices
 - **E2E Testing** - Playwright test suite for critical user flows
 - **Cloudflare Ready** - Deployable to Cloudflare Pages
+- **Tauri Support** - Coming soon: Native desktop app for Windows, macOS, and Linux
 
 ## 📁 Project Structure
 
 ```
-yourpost-webmail/
+yourpost-app/
 ├── src/
 │   ├── app/                    # Next.js app directory
 │   │   ├── layout.tsx         # Root layout with providers
