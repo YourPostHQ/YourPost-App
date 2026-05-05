@@ -14,6 +14,8 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // Output directory for static export
+  distDir: 'out',
 }
 
 module.exports = nextConfig
