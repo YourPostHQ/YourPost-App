@@ -164,7 +164,7 @@ export default function WebmailApp() {
   }
 
   return (
-    <div className="flex-1 flex overflow-hidden">
+    <div className="flex-1 flex flex-row overflow-hidden">
 
       {/* Sidebar */}
       <aside className="w-52 flex-shrink-0 flex flex-col border-r border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950">

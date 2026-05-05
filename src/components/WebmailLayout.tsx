@@ -64,7 +64,7 @@ export function WebmailLayout({ children }: { children: React.ReactNode }) {
       </header>
 
       {/* Main content - takes remaining height */}
-      <main className="flex-1 overflow-hidden">
+      <main className="flex-1 overflow-hidden flex">
         {children}
       </main>
     </div>
